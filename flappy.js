@@ -15,27 +15,28 @@
     pipeNorth.src = "images/pipeSouth.png";  
     pipeSouth.src = "images/pipeNorth.png";  
       
-    var gap = 105;  
+    var gap = 200  ;  
     var constant;  
       
     var bX = 10;  
     var bY = 150;  
       
-    var gravity = 1.5;  
+    var gravity = 1;  
       
     var score = 0;  
+		var highScore = window.localStorage.getItem('highscore') ? window.localStorage.getItem('highscore') : 0;
       
-    var fly = new Audio();  
-    var scor = new Audio();  
+    // var fly = new Audio();  
+    // var scor = new Audio();  
       
-    fly.src = "sounds/fly.mp3";  
-    scor.src = "sounds/score.mp3";  
+    // fly.src = "sounds/fly.mp3";  
+    // scor.src = "sounds/score.mp3";  
       
     document.addEventListener("keydown",moveUp);  
       
     function moveUp(){  
         bY -= 25;  
-        fly.play();  
+        // fly.play();  
     }  
       
     var pipe = [];  
@@ -65,13 +66,16 @@
                 });   
             }  
               
-            if( bX + bird.width >= pipe[i].x && bX <= pipe[i].x + pipeNorth.width && (bY <= pipe[i].y + pipeNorth.height || bY+bird.height >= pipe[i].y+constant) || bY + bird.height >=  cvs.height - fg.height){  
-                location.reload();
+            if( bX + bird.width >= pipe[i].x && bX <= pipe[i].x + pipeNorth.width && (bY <= pipe[i].y + pipeNorth.height || bY+bird.height >= pipe[i].y+constant) || bY + bird.height >=  cvs.height - fg.height){
+								highScore = score > highScore ? score : highScore
+								window.localStorage.setItem('highscore', highScore)
+                window.location.reload(true);
+
             }  
               
             if(pipe[i].x == 5){  
                 score++;  
-                scor.play();  
+                // scor.play();  
             }  
               
               
@@ -80,16 +84,23 @@
         ctx.drawImage(fg,0,cvs.height - fg.height);  
           
         ctx.drawImage(bird,bX,bY);  
+
           
-        bY += gravity;  
+				bY += gravity;
+
           
         ctx.fillStyle = "#000";  
         ctx.font = "20px Verdana";  
-        ctx.fillText("Score : "+score,10,cvs.height-20);  
+        ctx.fillText("Score : "+score+'  High Score: '+highScore,10,cvs.height-20);  
           
-        requestAnimationFrame(draw);  
-          
-    }  
+        if(bY + bird.height <  cvs.height - fg.height){
+					requestAnimationFrame(draw);  
+				}else{
+					highScore = score > highScore ? score : highScore
+					window.localStorage.setItem('highscore', highScore)
+					window.location.reload(true);
+				}
+		}
       
     draw();  
 

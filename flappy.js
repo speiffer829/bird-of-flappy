@@ -33,6 +33,7 @@
     // scor.src = "sounds/score.mp3";  
       
     document.addEventListener("keydown",moveUp);  
+    cvs.addEventListener("click",moveUp);  
       
     function moveUp(){  
         bY -= 25;  
